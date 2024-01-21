@@ -2,14 +2,17 @@ package io.billie.products.model
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.billie.organisations.viewmodel.LegalEntityType
+import io.billie.products.enums.LegalEntityType
+import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDate
-import javax.validation.constraints.NotBlank
+import java.util.*
 
+@Table("ORGANISATIONS")
 data class OrganisationDto(
-    @field:NotBlank val name: String,
+    val id: UUID,
+    val name: String,
     @JsonFormat(pattern = "dd/MM/yyyy") @JsonProperty("date_founded") val dateFounded: LocalDate,
-    @field:NotBlank @JsonProperty("country_code") val countryCode: String,
+    val country: CountryDto,
     @JsonProperty("vat_number") val VATNumber: String?,
     @JsonProperty("registration_number") val registrationNumber: String?,
     @JsonProperty("local_address") val address: String?,

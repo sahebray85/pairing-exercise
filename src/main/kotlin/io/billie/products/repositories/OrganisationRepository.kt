@@ -2,11 +2,10 @@ package io.billie.products.repositories
 
 import io.billie.products.model.CountryDto
 import io.billie.products.exceptions.UnableToFindCountry
-import io.billie.organisations.viewmodel.*
+import io.billie.products.enums.LegalEntityType
 import io.billie.products.model.ContactDetailsRequestDto
+import io.billie.products.model.OrganisationRequestDto
 import io.billie.products.model.OrganisationDto
-import io.billie.products.repositories.entities.ContactDetailsEntity
-import io.billie.products.repositories.entities.OrganisationEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.ResultSetExtractor
@@ -27,12 +26,12 @@ class OrganisationRepository {
     lateinit var jdbcTemplate: JdbcTemplate
 
     @Transactional(readOnly = true)
-    fun findOrganisations(): List<OrganisationResponse> {
+    fun findOrganisations(): List<OrganisationDto> {
         return jdbcTemplate.query(organisationQuery(), organisationMapper())
     }
 
     @Transactional
-    fun create(organisation: OrganisationDto): UUID {
+    fun create(organisation: OrganisationRequestDto): UUID {
         if(!valuesValid(organisation)) {
             throw UnableToFindCountry(organisation.countryCode)
         }
@@ -40,7 +39,7 @@ class OrganisationRepository {
         return createOrganisation(organisation, id)
     }
 
-    private fun valuesValid(organisation: OrganisationDto): Boolean {
+    private fun valuesValid(organisation: OrganisationRequestDto): Boolean {
         val reply: Int? = jdbcTemplate.query(
             "select count(country_code) from organisations_schema.countries c WHERE c.country_code = ?",
             ResultSetExtractor {
@@ -52,7 +51,7 @@ class OrganisationRepository {
         return (reply != null) && (reply > 0)
     }
 
-    private fun createOrganisation(org: OrganisationDto, contactDetailsId: UUID): UUID {
+    private fun createOrganisation(org: OrganisationRequestDto, contactDetailsId: UUID): UUID {
         val keyHolder: KeyHolder = GeneratedKeyHolder()
         jdbcTemplate.update(
             { connection ->
@@ -126,8 +125,8 @@ class OrganisationRepository {
             "INNER JOIN organisations_schema.contact_details cd on o.contact_details_id::uuid = cd.id::uuid " +
             "INNER JOIN organisations_schema.countries c on o.country_code = c.country_code "
 
-    private fun organisationMapper() = RowMapper<OrganisationResponse> { it: ResultSet, _: Int ->
-        OrganisationResponse(
+    private fun organisationMapper() = RowMapper<OrganisationDto> { it: ResultSet, _: Int ->
+        OrganisationDto(
             it.getObject("id", UUID::class.java),
             it.getString("name"),
             Date(it.getDate("date_founded").time).toLocalDate(),

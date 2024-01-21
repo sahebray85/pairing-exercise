@@ -2,9 +2,9 @@ package io.billie.products.controllers
 
 import io.billie.products.exceptions.UnableToFindCountry
 import io.billie.products.services.OrganisationService
-import io.billie.organisations.viewmodel.Entity
+import io.billie.products.model.Entity
+import io.billie.products.model.OrganisationRequestDto
 import io.billie.products.model.OrganisationDto
-import io.billie.organisations.viewmodel.OrganisationResponse
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -21,7 +21,7 @@ import javax.validation.Valid
 class OrganisationResource(val service: OrganisationService) {
 
     @GetMapping
-    fun index(): List<OrganisationResponse> = service.findOrganisations()
+    fun index(): List<OrganisationDto> = service.findOrganisations()
 
     @PostMapping
     @ApiResponses(
@@ -37,7 +37,7 @@ class OrganisationResource(val service: OrganisationService) {
             ),
             ApiResponse(responseCode = "400", description = "Bad request", content = [Content()])]
     )
-    fun post(@Valid @RequestBody organisation: OrganisationDto): Entity {
+    fun post(@Valid @RequestBody organisation: OrganisationRequestDto): Entity {
         try {
             val id = service.createOrganisation(organisation)
             return Entity(id)

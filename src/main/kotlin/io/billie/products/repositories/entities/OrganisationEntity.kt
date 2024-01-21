@@ -1,6 +1,6 @@
 package io.billie.products.repositories.entities
 
-import io.billie.organisations.viewmodel.LegalEntityType
+import io.billie.products.enums.LegalEntityType
 import io.billie.products.model.ContactDetailsDto
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDate
