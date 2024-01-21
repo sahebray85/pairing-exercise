@@ -15,7 +15,7 @@ plugins {
 
 group = "io.billie"
 version = "0.0.1"
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_15
 
 
 val dbConf = Properties().apply {
