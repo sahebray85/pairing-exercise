@@ -46,7 +46,7 @@ class OrderRepository {
         val currTime = LocalDateTime.now()
         return OrderEntity(order.buyer_id,
                 order.merchant_id,
-                order.totalAmount,
+                BigDecimal(order.totalAmount),
                 order.currencyCode,
                 currTime
             )
@@ -67,11 +67,11 @@ class OrderRepository {
                             ") VALUES (?, ?, ?, ?, ?)",
                     arrayOf("id")
                 )
-                ps.setString(1, order.buyer_id)
-                ps.setObject(2, order.merchant_id)
-                ps.setBigDecimal(3, BigDecimal(order.totalAmount))
+                ps.setString(1, order.buyerId)
+                ps.setObject(2, order.merchantId)
+                ps.setBigDecimal(3, order.totalAmount)
                 ps.setString(4, order.currencyCode)
-                ps.setTimestamp(5, Timestamp.valueOf(order.order_created))
+                ps.setTimestamp(5, Timestamp.valueOf(order.orderCreated))
                 ps
             }, keyHolder
         )

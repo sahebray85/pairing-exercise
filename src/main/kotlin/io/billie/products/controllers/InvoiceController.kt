@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -36,6 +37,29 @@ class InvoiceController(val service: InvoiceService) {
             ApiResponse(responseCode = "400", description = "Bad request", content = [Content()])]
     )
     fun post(@Valid @RequestBody invoice: InvoiceRequestDto): Entity {
+        try {
+            val id = service.createInvoice(invoice)
+            return Entity(id)
+        } catch (e: UnableToFindOrder) {
+            throw ResponseStatusException(BAD_REQUEST, e.message)
+        }
+    }
+
+    @PutMapping
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Accepted the new invoice",
+                content = [
+                    (Content(
+                        mediaType = "application/json",
+                        array = (ArraySchema(schema = Schema(implementation = Entity::class)))
+                    ))]
+            ),
+            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()])]
+    )
+    fun put(@Valid @RequestBody invoice: InvoiceRequestDto): Entity {
         try {
             val id = service.createInvoice(invoice)
             return Entity(id)

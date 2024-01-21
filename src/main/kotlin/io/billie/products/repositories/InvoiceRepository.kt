@@ -1,9 +1,11 @@
 package io.billie.products.repositories
 
 import io.billie.products.enums.InvoiceStatusType
+import io.billie.products.exceptions.InvalidInvoiceAmount
 import io.billie.products.exceptions.UnableToFindOrder
 import io.billie.products.model.*
 import io.billie.products.repositories.entities.InvoiceEntity
+import io.billie.products.repositories.entities.OrderEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.ResultSetExtractor
@@ -25,22 +27,49 @@ class InvoiceRepository {
 
     @Transactional
     fun create(invoice: InvoiceRequestDto): UUID {
-        if(!validOrder(invoice.order_id)) {
-            throw UnableToFindOrder(invoice.order_id)
+
+        val order = getOrderDetails(invoice.order_id) ?: throw UnableToFindOrder(invoice.order_id)
+
+        val orderAmount = order.totalAmount ?: BigDecimal.ZERO;
+        val totalInvoiceAmount = getTotalInvoiceAmount(invoice.order_id);
+        val requestedInvoiceAmount = BigDecimal(invoice.totalAmount);
+        if(requestedInvoiceAmount > orderAmount) {
+            throw InvalidInvoiceAmount("Invoice amount {} is greater than order amount {}".format(totalInvoiceAmount, orderAmount))
+        }
+        if(requestedInvoiceAmount + totalInvoiceAmount > orderAmount) {
+            val pendingAmount = orderAmount - totalInvoiceAmount
+            throw InvalidInvoiceAmount("Invoice amount {} can't exceed {} for a total order amount of {}".format(requestedInvoiceAmount, pendingAmount, orderAmount))
         }
         return createInvoice(invoiceEntityMapper(invoice))
     }
 
-    private fun validOrder(orderId: UUID): Boolean {
-        val reply: String? = jdbcTemplate.query(
-            "select id from organisations_schema.order_summary order_summary WHERE order_summary.id = ?",
-            ResultSetExtractor {
-                it.next()
-                it.getString(1)
+    fun getOrderDetails(orderId: UUID) : OrderEntity? {
+        val sql = "select * from organisations_schema.order_summary order_summary WHERE order_summary.id = ?"
+        val reply: List<OrderEntity> = jdbcTemplate.query(
+            sql,
+            { rs, _ ->
+                OrderEntity(
+                    totalAmount = rs.getBigDecimal("total_amount"),
+                    currencyCode = rs.getString("currency_code")
+                )
             },
             orderId
         )
-        return (reply != null)
+        return reply.first()
+    }
+
+    fun getTotalInvoiceAmount(orderId: UUID) : BigDecimal {
+
+        val sql = "select sum(invoice.invoice_amount) from organisations_schema.invoice_summary invoice WHERE invoice.order_id = ? GROUP BY invoice.order_id"
+        val reply: BigDecimal? = jdbcTemplate.query(
+            sql,
+            ResultSetExtractor {
+                it.next()
+                it.getBigDecimal(1)
+            },
+            orderId
+        )
+        return reply ?: BigDecimal.ZERO
     }
 
     private fun invoiceEntityMapper(invoice: InvoiceRequestDto) : InvoiceEntity  {
