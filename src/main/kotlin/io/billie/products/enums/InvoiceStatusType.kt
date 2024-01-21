@@ -1,6 +1,6 @@
 package io.billie.products.enums;
 
-public enum InvoiceStatusEntity {
+enum class InvoiceStatusType {
     INITIATED,
     COMPLETED
 }

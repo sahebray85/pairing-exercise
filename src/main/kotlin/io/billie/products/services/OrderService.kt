@@ -9,8 +9,6 @@ import java.util.*
 @Service
 class OrderService(val db: OrderRepository) {
 
-    fun findOrder(): List<OrderSummaryDto> = db.findInvoices()
-
     fun createOrder(order: OrderRequestDto): UUID {
         return db.create(order)
     }

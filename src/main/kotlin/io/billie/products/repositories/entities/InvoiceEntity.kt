@@ -1,14 +1,17 @@
 package io.billie.products.repositories.entities
 
+import io.billie.products.enums.InvoiceStatusType
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 import java.util.*
 
-@Table("ORDER_SUMMARY")
+@Table("INVOICE_SUMMARY")
 data class InvoiceEntity(
-    val buyer_id: String,
-    val merchant_id: UUID,
-    val totalAmount: String,
+    //val invoice_id: UUID?,
+    val orderId: UUID,
+    val amount: String,
     val currencyCode: String,
-    val order_created: LocalDateTime
+    val invoiceCreated: LocalDateTime,
+    val invoiceStatus: InvoiceStatusType,
+    val invoiceUpdated: LocalDateTime,
 )
