@@ -2,6 +2,7 @@ package io.billie.organisations.viewmodel
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.billie.products.model.ContactDetailsRequestDto
 import io.billie.products.model.CountryDto
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDate
@@ -17,5 +18,5 @@ data class OrganisationResponse(
     @JsonProperty("registration_number") val registrationNumber: String?,
     @JsonProperty("local_address") val address: String?,
     @JsonProperty("legal_entity_type") val legalEntityType: LegalEntityType,
-    @JsonProperty("contact_details") val contactDetails: ContactDetails,
+    @JsonProperty("contact_details") val contactDetails: ContactDetailsRequestDto,
 )

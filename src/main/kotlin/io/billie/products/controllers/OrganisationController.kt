@@ -3,7 +3,7 @@ package io.billie.products.controllers
 import io.billie.products.exceptions.UnableToFindCountry
 import io.billie.products.services.OrganisationService
 import io.billie.organisations.viewmodel.Entity
-import io.billie.organisations.viewmodel.OrganisationRequest
+import io.billie.products.model.OrganisationDto
 import io.billie.organisations.viewmodel.OrganisationResponse
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
@@ -37,7 +37,7 @@ class OrganisationResource(val service: OrganisationService) {
             ),
             ApiResponse(responseCode = "400", description = "Bad request", content = [Content()])]
     )
-    fun post(@Valid @RequestBody organisation: OrganisationRequest): Entity {
+    fun post(@Valid @RequestBody organisation: OrganisationDto): Entity {
         try {
             val id = service.createOrganisation(organisation)
             return Entity(id)

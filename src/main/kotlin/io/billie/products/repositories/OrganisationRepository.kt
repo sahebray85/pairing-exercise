@@ -3,6 +3,10 @@ package io.billie.products.repositories
 import io.billie.products.model.CountryDto
 import io.billie.products.exceptions.UnableToFindCountry
 import io.billie.organisations.viewmodel.*
+import io.billie.products.model.ContactDetailsRequestDto
+import io.billie.products.model.OrganisationDto
+import io.billie.products.repositories.entities.ContactDetailsEntity
+import io.billie.products.repositories.entities.OrganisationEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.ResultSetExtractor
@@ -28,7 +32,7 @@ class OrganisationRepository {
     }
 
     @Transactional
-    fun create(organisation: OrganisationRequest): UUID {
+    fun create(organisation: OrganisationDto): UUID {
         if(!valuesValid(organisation)) {
             throw UnableToFindCountry(organisation.countryCode)
         }
@@ -36,7 +40,7 @@ class OrganisationRepository {
         return createOrganisation(organisation, id)
     }
 
-    private fun valuesValid(organisation: OrganisationRequest): Boolean {
+    private fun valuesValid(organisation: OrganisationDto): Boolean {
         val reply: Int? = jdbcTemplate.query(
             "select count(country_code) from organisations_schema.countries c WHERE c.country_code = ?",
             ResultSetExtractor {
@@ -48,7 +52,7 @@ class OrganisationRepository {
         return (reply != null) && (reply > 0)
     }
 
-    private fun createOrganisation(org: OrganisationRequest, contactDetailsId: UUID): UUID {
+    private fun createOrganisation(org: OrganisationDto, contactDetailsId: UUID): UUID {
         val keyHolder: KeyHolder = GeneratedKeyHolder()
         jdbcTemplate.update(
             { connection ->
@@ -79,7 +83,7 @@ class OrganisationRepository {
         return keyHolder.getKeyAs(UUID::class.java)!!
     }
 
-    private fun createContactDetails(contactDetails: ContactDetailsRequest): UUID {
+    private fun createContactDetails(contactDetails: ContactDetailsRequestDto): UUID {
         val keyHolder: KeyHolder = GeneratedKeyHolder()
         jdbcTemplate.update(
             { connection ->
@@ -136,9 +140,9 @@ class OrganisationRepository {
         )
     }
 
-    private fun mapContactDetails(it: ResultSet): ContactDetails {
-        return ContactDetails(
-            UUID.fromString(it.getString("contact_details_id")),
+    private fun mapContactDetails(it: ResultSet): ContactDetailsRequestDto {
+        return ContactDetailsRequestDto(
+            // UUID.fromString(it.getString("contact_details_id")),
             it.getString("phone_number"),
             it.getString("fax"),
             it.getString("email")
