@@ -1,6 +1,7 @@
 package io.billie.products.repositories
 
 import io.billie.products.enums.InvoiceStatusType
+import io.billie.products.exceptions.UnableToFindOrder
 import io.billie.products.model.*
 import io.billie.products.repositories.entities.InvoiceEntity
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,4 +1,4 @@
-package io.billie.products.model
+package io.billie.products.exceptions
 
 import java.util.*
 

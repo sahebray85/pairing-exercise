@@ -2,7 +2,7 @@ package io.billie.products.controllers
 
 import io.billie.products.model.Entity
 import io.billie.products.model.InvoiceRequestDto
-import io.billie.products.model.UnableToFindOrder
+import io.billie.products.exceptions.UnableToFindOrder
 import io.billie.products.services.InvoiceService
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
