@@ -28,6 +28,7 @@ object Fixtures {
                 "  \"country_code\": \"GB\",\n" +
                 "  \"vat_number\": \"333289454\",\n" +
                 "  \"registration_number\": \"3686147\",\n" +
+                "  \"local_address\": \"some address\", \n" +
                 "  \"legal_entity_type\": \"NONPROFIT_ORGANIZATION\",\n" +
                 "  \"contact_details\": {\n" +
                 "    \"phone_number\": \"+443700100222\",\n" +
@@ -44,6 +45,7 @@ object Fixtures {
                 "  \"country_code\": \"GB\",\n" +
                 "  \"vat_number\": \"333289454\",\n" +
                 "  \"registration_number\": \"3686147\",\n" +
+                "  \"local_address\": \"some address\", \n" +
                 "  \"contact_details\": {\n" +
                 "    \"phone_number\": \"+443700100222\",\n" +
                 "    \"fax\": \"\",\n" +
@@ -59,6 +61,7 @@ object Fixtures {
                 "  \"country_code\": \"GB\",\n" +
                 "  \"vat_number\": \"333289454\",\n" +
                 "  \"registration_number\": \"3686147\",\n" +
+                "  \"local_address\": \"some address\", \n" +
                 "  \"legal_entity_type\": \"NONPROFIT_ORGANIZATION\"\n" +
                 "}"
     }
@@ -70,6 +73,7 @@ object Fixtures {
                 "  \"country_code\": \"GB\",\n" +
                 "  \"vat_number\": \"333289454\",\n" +
                 "  \"registration_number\": \"3686147\",\n" +
+                "  \"local_address\": \"some address\", \n" +
                 "  \"legal_entity_type\": \"NONPROFIT_ORGANIZATION\",\n" +
                 "  \"contact_details\": {\n" +
                 "    \"phone_number\": \"+443700100222\",\n" +
@@ -86,6 +90,7 @@ object Fixtures {
                 "  \"country_code\": \"\",\n" +
                 "  \"vat_number\": \"333289454\",\n" +
                 "  \"registration_number\": \"3686147\",\n" +
+                "  \"local_address\": \"some address\", \n" +
                 "  \"legal_entity_type\": \"NONPROFIT_ORGANIZATION\",\n" +
                 "  \"contact_details\": {\n" +
                 "    \"phone_number\": \"+443700100222\",\n" +
@@ -102,6 +107,7 @@ object Fixtures {
                 "  \"vat_number\": \"333289454\",\n" +
                 "  \"registration_number\": \"3686147\",\n" +
                 "  \"legal_entity_type\": \"NONPROFIT_ORGANIZATION\",\n" +
+                "  \"local_address\": \"some address\", \n" +
                 "  \"contact_details\": {\n" +
                 "    \"phone_number\": \"+443700100222\",\n" +
                 "    \"fax\": \"\",\n" +
@@ -117,6 +123,7 @@ object Fixtures {
                 "  \"country_code\": \"XX\",\n" +
                 "  \"vat_number\": \"333289454\",\n" +
                 "  \"registration_number\": \"3686147\",\n" +
+                "  \"local_address\": \"some address\", \n" +
                 "  \"legal_entity_type\": \"NONPROFIT_ORGANIZATION\",\n" +
                 "  \"contact_details\": {\n" +
                 "    \"phone_number\": \"+443700100222\",\n" +
@@ -135,6 +142,7 @@ object Fixtures {
         data["vat_number"] = "333289454"
         data["registration_number"] = "3686147"
         data["legal_entity_type"] = "NONPROFIT_ORGANIZATION"
+        data["local_address"] = "some address"
         return data
     }
 
@@ -146,7 +154,4 @@ object Fixtures {
         data["email"] = "yourquestions@bbc.co.uk"
         return data
     }
-
-
-
 }

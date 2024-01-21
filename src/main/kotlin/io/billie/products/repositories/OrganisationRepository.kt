@@ -59,9 +59,10 @@ class OrganisationRepository {
                             "country_code, " +
                             "vat_number, " +
                             "registration_number, " +
+                            "local_address, " +
                             "legal_entity_type, " +
                             "contact_details_id" +
-                            ") VALUES (?, ?, ?, ?, ?, ?, ?)",
+                            ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     arrayOf("id")
                 )
                 ps.setString(1, org.name)
@@ -69,8 +70,9 @@ class OrganisationRepository {
                 ps.setString(3, org.countryCode)
                 ps.setString(4, org.VATNumber)
                 ps.setString(5, org.registrationNumber)
-                ps.setString(6, org.legalEntityType.toString())
-                ps.setObject(7, contactDetailsId)
+                ps.setString(6, org.address)
+                ps.setString(7, org.legalEntityType.toString())
+                ps.setObject(8, contactDetailsId)
                 ps
             }, keyHolder
         )
@@ -109,6 +111,7 @@ class OrganisationRepository {
             "c.name as country_name, " +
             "o.VAT_number as VAT_number, " +
             "o.registration_number as registration_number," +
+            "o.local_address as local_address," +
             "o.legal_entity_type as legal_entity_type," +
             "o.contact_details_id as contact_details_id, " +
             "cd.phone_number as phone_number, " +
@@ -127,6 +130,7 @@ class OrganisationRepository {
             mapCountry(it),
             it.getString("vat_number"),
             it.getString("registration_number"),
+            it.getString("local_address"),
             LegalEntityType.valueOf(it.getString("legal_entity_type")),
             mapContactDetails(it)
         )

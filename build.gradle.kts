@@ -48,6 +48,7 @@ flyway {
     user = dbConf.getProperty("POSTGRES_USER")
     password = dbConf.getProperty("POSTGRES_PASSWORD")
     locations = arrayOf(dbConf.getProperty("DATABASE_MIGRATION"))
+    cleanDisabled = false
 }
 
 tasks.withType<KotlinCompile> {
