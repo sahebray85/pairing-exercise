@@ -1,10 +1,8 @@
 package io.billie.products.controllers
 
-import io.billie.products.exceptions.UnableToFindCountry
-import io.billie.products.services.OrganisationService
-import io.billie.products.model.Entity
-import io.billie.products.model.OrganisationRequestDto
-import io.billie.products.model.OrganisationDto
+import io.billie.products.exceptions.UnableToOrganisation
+import io.billie.products.model.*
+import io.billie.products.services.OrderService
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -17,18 +15,18 @@ import javax.validation.Valid
 
 
 @RestController
-@RequestMapping("invoices")
-class OrganisationResource(val service: OrganisationService) {
+@RequestMapping("orders")
+class OrderController(val service: OrderService) {
 
     @GetMapping
-    fun index(): List<OrganisationDto> = service.findOrganisations()
+    fun index(): List<OrderSummaryDto> = service.findOrder()
 
     @PostMapping
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
-                description = "Accepted the new organisation",
+                description = "Accepted the new invoice",
                 content = [
                     (Content(
                         mediaType = "application/json",
@@ -37,11 +35,11 @@ class OrganisationResource(val service: OrganisationService) {
             ),
             ApiResponse(responseCode = "400", description = "Bad request", content = [Content()])]
     )
-    fun post(@Valid @RequestBody organisation: OrganisationRequestDto): Entity {
+    fun post(@Valid @RequestBody invoice: OrderRequestDto): Entity {
         try {
-            val id = service.createOrganisation(organisation)
+            val id = service.createOrder(invoice)
             return Entity(id)
-        } catch (e: UnableToFindCountry) {
+        } catch (e: UnableToOrganisation) {
             throw ResponseStatusException(BAD_REQUEST, e.message)
         }
     }

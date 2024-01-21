@@ -1,3 +1,5 @@
 package io.billie.products.exceptions
 
-class UnableToOrganisation(val merchant_id: String) : RuntimeException()
+import java.util.*
+
+class UnableToOrganisation(val merchantId: UUID) : RuntimeException()
