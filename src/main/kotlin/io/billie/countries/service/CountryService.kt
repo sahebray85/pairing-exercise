@@ -1,7 +1,7 @@
 package io.billie.countries.service
 
-import io.billie.countries.data.CityRepository
-import io.billie.countries.data.CountryRepository
+import io.billie.products.repositories.CityRepository
+import io.billie.products.repositories.CountryRepository
 import io.billie.countries.model.CityResponse
 import io.billie.countries.model.CountryResponse
 import org.springframework.stereotype.Service

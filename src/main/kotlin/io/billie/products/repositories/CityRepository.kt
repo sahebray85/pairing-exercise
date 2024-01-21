@@ -1,6 +1,6 @@
-package io.billie.countries.data
+package io.billie.products.repositories
 
-import io.billie.countries.model.CountryResponse
+import io.billie.countries.model.CityResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
@@ -10,22 +10,23 @@ import java.sql.ResultSet
 import java.util.*
 
 @Repository
-class CountryRepository {
+class CityRepository {
+
 
     @Autowired
     lateinit var jdbcTemplate: JdbcTemplate
 
-    @Transactional(readOnly=true)
-    fun findCountries(): List<CountryResponse> {
-        val query = jdbcTemplate.query(
-            "select id, name, country_code from organisations_schema.countries",
-            countryResponseMapper()
+    @Transactional(readOnly = true)
+    fun findByCountryCode(countryCode: String): List<CityResponse> {
+        return jdbcTemplate.query(
+            "select id, name, country_code from organisations_schema.cities where country_code = ?",
+            cityResponseMapper(),
+            countryCode
         )
-        return query
     }
 
-    private fun countryResponseMapper() = RowMapper<CountryResponse> { it: ResultSet, _: Int ->
-        CountryResponse(
+    private fun cityResponseMapper() = RowMapper<CityResponse> { it: ResultSet, _: Int ->
+        CityResponse(
             it.getObject("id", UUID::class.java),
             it.getString("name"),
             it.getString("country_code")

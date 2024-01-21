@@ -1,4 +1,4 @@
-package io.billie.countries.resource
+package io.billie.products.controllers
 
 import io.billie.countries.model.CityResponse
 import io.billie.countries.model.CountryResponse
@@ -14,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("countries")
-class CountryResource(val service: CountryService) {
+class OrganisationController(val service: CountryService) {
 
     @ApiResponses(
         value = [
