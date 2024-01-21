@@ -1,6 +1,6 @@
 package io.billie.products.repositories
 
-import io.billie.countries.model.CountryResponse
+import io.billie.products.model.CountryDto
 import io.billie.products.exceptions.UnableToFindCountry
 import io.billie.organisations.viewmodel.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -145,8 +145,8 @@ class OrganisationRepository {
         )
     }
 
-    private fun mapCountry(it: ResultSet): CountryResponse {
-        return CountryResponse(
+    private fun mapCountry(it: ResultSet): CountryDto {
+        return CountryDto(
             it.getObject("country_id", UUID::class.java),
             it.getString("country_name"),
             it.getString("country_code")

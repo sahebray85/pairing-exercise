@@ -1,7 +1,7 @@
 package io.billie.products.controllers
 
-import io.billie.countries.model.CityResponse
-import io.billie.countries.model.CountryResponse
+import io.billie.products.model.CountryDto
+import io.billie.products.model.CityDto
 import io.billie.products.services.CountryService
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
@@ -14,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("countries")
-class CountryController(val service: CountryService) {
+class LocationController(val service: CountryService) {
 
     @ApiResponses(
         value = [
@@ -24,12 +24,12 @@ class CountryController(val service: CountryService) {
                 content = [
                     (Content(
                         mediaType = "application/json",
-                        array = (ArraySchema(schema = Schema(implementation = CountryResponse::class)))
+                        array = (ArraySchema(schema = Schema(implementation = CountryDto::class)))
                     ))]
             )]
     )
     @GetMapping
-    fun index(): List<CountryResponse> = service.findCountries()
+    fun index(): List<CountryDto> = service.findCountries()
 
     @ApiResponses(
         value = [
@@ -39,13 +39,13 @@ class CountryController(val service: CountryService) {
                 content = [
                     (Content(
                         mediaType = "application/json",
-                        array = (ArraySchema(schema = Schema(implementation = CityResponse::class)))
+                        array = (ArraySchema(schema = Schema(implementation = CityDto::class)))
                     ))]
             ),
             ApiResponse(responseCode = "404", description = "No cities found for country code", content = [Content()])]
     )
     @GetMapping("/{countryCode}/cities")
-    fun cities(@PathVariable("countryCode") countryCode: String): List<CityResponse> {
+    fun cities(@PathVariable("countryCode") countryCode: String): List<CityDto> {
         val cities = service.findCities(countryCode.uppercase())
         if (cities.isEmpty()) {
             throw ResponseStatusException(

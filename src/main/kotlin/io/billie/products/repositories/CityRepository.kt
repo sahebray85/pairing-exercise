@@ -1,6 +1,7 @@
 package io.billie.products.repositories
 
-import io.billie.countries.model.CityResponse
+import io.billie.products.model.CityDto
+import io.billie.products.repositories.entities.CityEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
@@ -12,12 +13,11 @@ import java.util.*
 @Repository
 class CityRepository {
 
-
     @Autowired
     lateinit var jdbcTemplate: JdbcTemplate
 
     @Transactional(readOnly = true)
-    fun findByCountryCode(countryCode: String): List<CityResponse> {
+    fun findByCountryCode(countryCode: String): List<CityEntity> {
         return jdbcTemplate.query(
             "select id, name, country_code from organisations_schema.cities where country_code = ?",
             cityResponseMapper(),
@@ -25,8 +25,8 @@ class CityRepository {
         )
     }
 
-    private fun cityResponseMapper() = RowMapper<CityResponse> { it: ResultSet, _: Int ->
-        CityResponse(
+    private fun cityResponseMapper() = RowMapper<CityEntity> { it: ResultSet, _: Int ->
+        CityEntity(
             it.getObject("id", UUID::class.java),
             it.getString("name"),
             it.getString("country_code")
