@@ -1,6 +1,7 @@
 package io.billie.products.repositories
 
 import io.billie.products.model.CountryDto
+import io.billie.products.repositories.entities.CountryEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
@@ -16,7 +17,7 @@ class CountryRepository {
     lateinit var jdbcTemplate: JdbcTemplate
 
     @Transactional(readOnly=true)
-    fun findCountries(): List<CountryDto> {
+    fun findCountries(): List<CountryEntity> {
         val query = jdbcTemplate.query(
             "select id, name, country_code from organisations_schema.countries",
             countryResponseMapper()
@@ -24,8 +25,8 @@ class CountryRepository {
         return query
     }
 
-    private fun countryResponseMapper() = RowMapper<CountryDto> { it: ResultSet, _: Int ->
-        CountryDto(
+    private fun countryResponseMapper() = RowMapper<CountryEntity> { it: ResultSet, _: Int ->
+        CountryEntity(
             it.getObject("id", UUID::class.java),
             it.getString("name"),
             it.getString("country_code")
