@@ -2,7 +2,7 @@ package io.billie.products.controllers
 
 import io.billie.countries.model.CityResponse
 import io.billie.countries.model.CountryResponse
-import io.billie.countries.service.CountryService
+import io.billie.products.services.CountryService
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema

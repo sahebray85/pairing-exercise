@@ -1,6 +1,6 @@
-package io.billie.organisations.service
+package io.billie.products.services
 
-import io.billie.organisations.data.OrganisationRepository
+import io.billie.products.repositories.OrganisationRepository
 import io.billie.organisations.viewmodel.OrganisationRequest
 import io.billie.organisations.viewmodel.OrganisationResponse
 import org.springframework.stereotype.Service

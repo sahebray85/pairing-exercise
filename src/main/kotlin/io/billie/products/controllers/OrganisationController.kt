@@ -1,59 +1,49 @@
 package io.billie.products.controllers
 
-import io.billie.countries.model.CityResponse
-import io.billie.countries.model.CountryResponse
-import io.billie.countries.service.CountryService
+import io.billie.organisations.data.UnableToFindCountry
+import io.billie.products.services.OrganisationService
+import io.billie.organisations.viewmodel.Entity
+import io.billie.organisations.viewmodel.OrganisationRequest
+import io.billie.organisations.viewmodel.OrganisationResponse
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-import org.springframework.http.HttpStatus.NOT_FOUND
+import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import javax.validation.Valid
+
 
 @RestController
-@RequestMapping("countries")
-class OrganisationController(val service: CountryService) {
+@RequestMapping("organisations")
+class OrganisationResource(val service: OrganisationService) {
 
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "200",
-                description = "All countries",
-                content = [
-                    (Content(
-                        mediaType = "application/json",
-                        array = (ArraySchema(schema = Schema(implementation = CountryResponse::class)))
-                    ))]
-            )]
-    )
     @GetMapping
-    fun index(): List<CountryResponse> = service.findCountries()
+    fun index(): List<OrganisationResponse> = service.findOrganisations()
 
+    @PostMapping
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
-                description = "Found cities for country",
+                description = "Accepted the new organisation",
                 content = [
                     (Content(
                         mediaType = "application/json",
-                        array = (ArraySchema(schema = Schema(implementation = CityResponse::class)))
+                        array = (ArraySchema(schema = Schema(implementation = Entity::class)))
                     ))]
             ),
-            ApiResponse(responseCode = "404", description = "No cities found for country code", content = [Content()])]
+            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()])]
     )
-    @GetMapping("/{countryCode}/cities")
-    fun cities(@PathVariable("countryCode") countryCode: String): List<CityResponse> {
-        val cities = service.findCities(countryCode.uppercase())
-        if (cities.isEmpty()) {
-            throw ResponseStatusException(
-                NOT_FOUND,
-                "No cities found for $countryCode"
-            )
+    fun post(@Valid @RequestBody organisation: OrganisationRequest): Entity {
+        try {
+            val id = service.createOrganisation(organisation)
+            return Entity(id)
+        } catch (e: UnableToFindCountry) {
+            throw ResponseStatusException(BAD_REQUEST, e.message)
         }
-        return cities
     }
 
 }

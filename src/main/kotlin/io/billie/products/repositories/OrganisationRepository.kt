@@ -1,6 +1,7 @@
-package io.billie.organisations.data
+package io.billie.products.repositories
 
 import io.billie.countries.model.CountryResponse
+import io.billie.organisations.data.UnableToFindCountry
 import io.billie.organisations.viewmodel.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate

@@ -1,4 +1,4 @@
-package io.billie.countries.service
+package io.billie.products.services
 
 import io.billie.products.repositories.CityRepository
 import io.billie.products.repositories.CountryRepository
