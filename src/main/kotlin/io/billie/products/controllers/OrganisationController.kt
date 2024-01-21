@@ -1,6 +1,6 @@
 package io.billie.products.controllers
 
-import io.billie.organisations.data.UnableToFindCountry
+import io.billie.products.exceptions.UnableToFindCountry
 import io.billie.products.services.OrganisationService
 import io.billie.organisations.viewmodel.Entity
 import io.billie.organisations.viewmodel.OrganisationRequest
