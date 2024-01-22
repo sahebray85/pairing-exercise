@@ -1,5 +1,6 @@
 package io.billie.functional.data
 
+import io.billie.products.enums.InvoiceStatusType
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -197,5 +198,36 @@ object Fixtures {
                 "    \"invoice_amount\" : \"12.30\",\n" +
                 "    \"currency_code\" : \"EUR\"\n" +
                 "}"
+    }
+
+    fun invoicePayloadWithAmount(orderId: String, amount:String, currencyCode : String): String {
+        return "{\n" +
+                "    \"order_id\" : \"" + orderId + "\",\n" +
+                "    \"invoice_amount\" : \"" + amount + "\",\n" +
+                "        \"currency_code\" : \"" + currencyCode + "\"\n" +
+                "}"
+    }
+
+    /*************************** PAYMENTS ******************************************/
+    fun paymentPayloadWoInvoiceId(): String {
+        return "    {\n" +
+                "        \"payment_amount\" : \"12.30\",\n" +
+                "        \"currency_code\" : \"EUR\"\n" +
+                "    }"
+    }
+
+    fun paymentPayload(invoiceId: String, amount:String, currencyCode : String): String {
+        return "    {\n" +
+                "        \"invoice_id\" : \"" + invoiceId + "\",\n" +
+                "        \"payment_amount\" : \"" + amount + "\",\n" +
+                "        \"currency_code\" : \"" + currencyCode + "\"\n" +
+                "    }"
+    }
+
+
+    fun invoiceStatusFixture(statusType: InvoiceStatusType): Map<String, Any> {
+        val data = HashMap<String, Any>()
+        data["invoice_status"] = statusType.toString()
+        return data
     }
 }

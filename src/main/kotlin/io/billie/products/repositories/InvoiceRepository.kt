@@ -2,14 +2,13 @@ package io.billie.products.repositories
 
 import io.billie.products.enums.InvoiceStatusType
 import io.billie.products.exceptions.ImprorerCurrencyCodeException
-import io.billie.products.exceptions.InvalidInvoiceAmountException
+import io.billie.products.exceptions.InvalidAmountException
 import io.billie.products.exceptions.UnableToFindOrderException
 import io.billie.products.model.*
 import io.billie.products.repositories.entities.InvoiceEntity
 import io.billie.products.repositories.entities.OrderEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.jdbc.core.ResultSetExtractor
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.jdbc.support.KeyHolder
 import org.springframework.stereotype.Repository
@@ -39,11 +38,11 @@ class InvoiceRepository {
         val totalInvoiceAmount = getTotalInvoiceAmount(invoice.orderId);
         val requestedInvoiceAmount = BigDecimal(invoice.totalAmount);
         if(requestedInvoiceAmount > orderAmount) {
-            throw InvalidInvoiceAmountException("Invoice amount $totalInvoiceAmount is greater than order amount $orderAmount")
+            throw InvalidAmountException("Invoice amount $requestedInvoiceAmount is greater than order amount $orderAmount")
         }
         if(requestedInvoiceAmount + totalInvoiceAmount > orderAmount) {
             val pendingAmount = orderAmount - totalInvoiceAmount
-            throw InvalidInvoiceAmountException("Invoice amount $requestedInvoiceAmount can't exceed $pendingAmount for a total order amount of $orderAmount")
+            throw InvalidAmountException("Invoice amount $requestedInvoiceAmount can't exceed $pendingAmount for a total order amount of $orderAmount")
         }
         return createInvoice(invoiceEntityMapper(invoice))
     }

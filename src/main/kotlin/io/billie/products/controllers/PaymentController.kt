@@ -1,7 +1,7 @@
 package io.billie.products.controllers
 
 import io.billie.products.exceptions.ImprorerCurrencyCodeException
-import io.billie.products.exceptions.InvalidInvoiceAmountException
+import io.billie.products.exceptions.InvalidAmountException
 import io.billie.products.exceptions.UnableToFindOrderException
 import io.billie.products.model.Entity
 import io.billie.products.model.PaymentRequestDto
@@ -43,7 +43,7 @@ class PaymentController(val service: PaymentService) {
             return Entity(id)
         } catch (e: ImprorerCurrencyCodeException) {
             throw ResponseStatusException(BAD_REQUEST, e.message)
-        } catch (e: InvalidInvoiceAmountException) {
+        } catch (e: InvalidAmountException) {
             throw ResponseStatusException(BAD_REQUEST, e.message)
         } catch (e: UnableToFindOrderException) {
             throw ResponseStatusException(BAD_REQUEST, e.message)

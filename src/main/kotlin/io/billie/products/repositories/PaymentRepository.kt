@@ -2,9 +2,8 @@ package io.billie.products.repositories
 
 import io.billie.products.enums.InvoiceStatusType
 import io.billie.products.exceptions.ImprorerCurrencyCodeException
-import io.billie.products.exceptions.InvalidInvoiceAmountException
+import io.billie.products.exceptions.InvalidAmountException
 import io.billie.products.exceptions.UnableToFindInvoiceException
-import io.billie.products.exceptions.UnableToFindOrderException
 import io.billie.products.model.*
 import io.billie.products.repositories.entities.InvoiceEntity
 import io.billie.products.repositories.entities.PaymentEntity
@@ -31,6 +30,10 @@ class PaymentRepository {
     fun create(payment: PaymentRequestDto): UUID {
 
         val invoice = getInvoiceDetails(payment.invoiceId) ?: throw UnableToFindInvoiceException(payment.invoiceId)
+
+        if(BigDecimal(payment.amount) != invoice.amount ) {
+            throw InvalidAmountException("Payment amount (${payment.amount}) must be same as invoice amount (${invoice.amount})")
+        }
 
         if (payment.currencyCode != invoice.currencyCode) {
             throw ImprorerCurrencyCodeException("Payment currency code ${payment.currencyCode} should match invoice currency code ${invoice.currencyCode}")
