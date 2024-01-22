@@ -8,3 +8,6 @@ CREATE TABLE IF NOT EXISTS organisations_schema.invoice_summary
     invoice_created      TIMESTAMP NOT NULL,
     invoice_updated      TIMESTAMP NOT NULL
  );
+
+ALTER TABLE organisations_schema.invoice_summary
+ADD CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES organisations_schema.order_summary(id);

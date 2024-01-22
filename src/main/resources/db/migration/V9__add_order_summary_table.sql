@@ -7,3 +7,6 @@ CREATE TABLE IF NOT EXISTS organisations_schema.order_summary
     currency_code      VARCHAR(3) NOT NULL,
     order_created      TIMESTAMP NOT NULL
  );
+
+ALTER TABLE organisations_schema.order_summary
+ADD CONSTRAINT fk_merchant FOREIGN KEY (merchant_id) REFERENCES organisations_schema.organisations(id);

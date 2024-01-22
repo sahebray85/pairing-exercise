@@ -6,3 +6,6 @@ CREATE TABLE IF NOT EXISTS organisations_schema.payment_summary
     currency_code      VARCHAR(3) NOT NULL,
     payment_date       TIMESTAMP NOT NULL
  );
+
+ALTER TABLE organisations_schema.payment_summary
+ADD CONSTRAINT fk_invoice FOREIGN KEY (invoice_id) REFERENCES organisations_schema.invoice_summary(id);
