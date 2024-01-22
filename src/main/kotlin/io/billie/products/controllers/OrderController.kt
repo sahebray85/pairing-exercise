@@ -1,6 +1,6 @@
 package io.billie.products.controllers
 
-import io.billie.products.exceptions.UnableToFindOrganisation
+import io.billie.products.exceptions.UnableToFindOrganisationException
 import io.billie.products.model.*
 import io.billie.products.services.OrderService
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -36,7 +36,7 @@ class OrderController(val service: OrderService) {
         try {
             val id = service.createOrder(order)
             return Entity(id)
-        } catch (e: UnableToFindOrganisation) {
+        } catch (e: UnableToFindOrganisationException) {
             throw ResponseStatusException(BAD_REQUEST, e.message)
         }
     }

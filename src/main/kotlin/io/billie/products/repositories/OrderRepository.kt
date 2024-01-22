@@ -1,6 +1,7 @@
 package io.billie.products.repositories
 
-import io.billie.products.exceptions.UnableToFindOrganisation
+import io.billie.products.exceptions.InvalidBuyerException
+import io.billie.products.exceptions.UnableToFindOrganisationException
 import io.billie.products.model.OrderRequestDto
 import io.billie.products.repositories.entities.OrderEntity
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,8 +25,11 @@ class OrderRepository {
 
     @Transactional
     fun create(order: OrderRequestDto): UUID {
+        if(order.buyerId.isEmpty()) {
+            throw InvalidBuyerException()
+        }
         if(!validOrganisation(order.merchantId)) {
-            throw UnableToFindOrganisation(order.merchantId)
+            throw UnableToFindOrganisationException(order.merchantId)
         }
         return createOrder(orderEntityMapper(order))
     }

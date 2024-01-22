@@ -154,4 +154,31 @@ object Fixtures {
         data["email"] = "yourquestions@bbc.co.uk"
         return data
     }
+
+
+    /******************************* ORDERS *************************************/
+    fun orderWithEmptyMerchantId(): String {
+        return "    {\n" +
+                "        \"buyer_email\" : \"sankha@xzy.com\",\n" +
+                "        \"order_amount\" : \"1200.30\",\n" +
+                "        \"currency_code\" : \"EUR\"\n" +
+                "    }"
+    }
+
+    fun orderWitNoBuyer(): String {
+        return "    {\n" +
+                "        \"merchant_id\": \"7e8186aa-360a-46c2-aa38-d9ec60380eff\",\n" +
+                "        \"order_amount\" : \"1200.30\",\n" +
+                "        \"currency_code\" : \"EUR\"\n" +
+                "    }"
+    }
+
+    fun orderPayload(orgId: String): String {
+        return "    {\n" +
+                "        \"buyer_email\" : \"sankha@xzy.com\",\n" +
+                "        \"merchant_id\": \"" + orgId + "\",\n" +
+                "        \"order_amount\" : \"1200.30\",\n" +
+                "        \"currency_code\" : \"EUR\"\n" +
+                "    }"
+    }
 }
