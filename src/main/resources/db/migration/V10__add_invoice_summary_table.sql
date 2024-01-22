@@ -5,6 +5,6 @@ CREATE TABLE IF NOT EXISTS organisations_schema.invoice_summary
     invoice_amount     DECIMAL(10, 2) NOT NULL,
     currency_code      VARCHAR(3) NOT NULL,
     invoice_status     VARCHAR(10) NOT NULL,
-    order_created      TIMESTAMP NOT NULL,
-    order_updated      TIMESTAMP NOT NULL
+    invoice_created      TIMESTAMP NOT NULL,
+    invoice_updated      TIMESTAMP NOT NULL
  );

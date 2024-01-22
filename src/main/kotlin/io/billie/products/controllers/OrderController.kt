@@ -32,9 +32,9 @@ class OrderController(val service: OrderService) {
             ),
             ApiResponse(responseCode = "400", description = "Bad request", content = [Content()])]
     )
-    fun post(@Valid @RequestBody invoice: OrderRequestDto): Entity {
+    fun post(@Valid @RequestBody order: OrderRequestDto): Entity {
         try {
-            val id = service.createOrder(invoice)
+            val id = service.createOrder(order)
             return Entity(id)
         } catch (e: UnableToFindOrganisation) {
             throw ResponseStatusException(BAD_REQUEST, e.message)

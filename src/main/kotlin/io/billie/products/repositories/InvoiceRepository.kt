@@ -65,27 +65,29 @@ class InvoiceRepository {
 
     fun getTotalInvoiceAmount(orderId: UUID) : BigDecimal {
 
-        val sql = "select sum(invoice.invoice_amount) from organisations_schema.invoice_summary invoice WHERE invoice.order_id = ? GROUP BY invoice.order_id"
-        val reply: BigDecimal? = jdbcTemplate.query(
+        val sql = "select sum(invoice.invoice_amount) as total_invoice_amount from organisations_schema.invoice_summary invoice WHERE invoice.order_id = ? GROUP BY invoice.order_id"
+        val reply: List<BigDecimal> = jdbcTemplate.query(
             sql,
-            ResultSetExtractor {
-                it.next()
-                it.getBigDecimal(1)
-            },
+            { rs, _ -> rs.getBigDecimal("total_invoice_amount") },
             orderId
         )
-        return reply ?: BigDecimal.ZERO
+        return if(reply.isNotEmpty()) {
+            reply.first()
+        } else {
+            BigDecimal.ZERO
+        }
     }
 
     private fun invoiceEntityMapper(invoice: InvoiceRequestDto) : InvoiceEntity  {
         val currTime = LocalDateTime.now()
-        return InvoiceEntity(invoice.orderId,
-                invoice.totalAmount,
-                invoice.currencyCode,
-                currTime,
-                InvoiceStatusType.INITIATED,
-                currTime
-            )
+        return InvoiceEntity(
+            orderId = invoice.orderId,
+            amount =  BigDecimal(invoice.totalAmount),
+            currencyCode = invoice.currencyCode,
+            invoiceCreated = currTime,
+            invoiceStatus = InvoiceStatusType.INITIATED,
+            invoiceUpdated = currTime
+        )
     }
 
     private fun createInvoice(invoice: InvoiceEntity): UUID {
@@ -99,13 +101,13 @@ class InvoiceRepository {
                             "invoice_amount, " +
                             "currency_code, " +
                             "invoice_status, " +
-                            "order_created, " +
-                            "order_updated " +
+                            "invoice_created, " +
+                            "invoice_updated " +
                             ") VALUES (?, ?, ?, ?, ?, ?)",
                     arrayOf("id")
                 )
                 ps.setObject(1, invoice.orderId)
-                ps.setBigDecimal(2, BigDecimal(invoice.amount))
+                ps.setBigDecimal(2, invoice.amount)
                 ps.setString(3, invoice.currencyCode)
                 ps.setString(4, invoice.invoiceStatus.toString())
                 ps.setTimestamp(5, Timestamp.valueOf(invoice.invoiceCreated))
