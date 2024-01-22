@@ -181,4 +181,21 @@ object Fixtures {
                 "        \"currency_code\" : \"EUR\"\n" +
                 "    }"
     }
+
+
+    /****************************** INVOICES ***************************************/
+    fun invoiceWithOutOrderId(): String {
+        return "    {\n" +
+                "        \"invoice_amount\" : \"12.30\",\n" +
+                "        \"currency_code\" : \"EUR\"\n" +
+                "    }"
+    }
+
+    fun invoicePayload(orderId: String): String {
+        return "{\n" +
+                "    \"order_id\" : \"" + orderId + "\",\n" +
+                "    \"invoice_amount\" : \"12.30\",\n" +
+                "    \"currency_code\" : \"EUR\"\n" +
+                "}"
+    }
 }
