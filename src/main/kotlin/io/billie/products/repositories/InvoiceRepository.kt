@@ -1,8 +1,9 @@
 package io.billie.products.repositories
 
 import io.billie.products.enums.InvoiceStatusType
-import io.billie.products.exceptions.InvalidInvoiceAmount
-import io.billie.products.exceptions.UnableToFindOrder
+import io.billie.products.exceptions.ImprorerCurrencyCodeException
+import io.billie.products.exceptions.InvalidInvoiceAmountException
+import io.billie.products.exceptions.UnableToFindOrderException
 import io.billie.products.model.*
 import io.billie.products.repositories.entities.InvoiceEntity
 import io.billie.products.repositories.entities.OrderEntity
@@ -28,17 +29,21 @@ class InvoiceRepository {
     @Transactional
     fun create(invoice: InvoiceRequestDto): UUID {
 
-        val order = getOrderDetails(invoice.order_id) ?: throw UnableToFindOrder(invoice.order_id)
+        val order = getOrderDetails(invoice.orderId) ?: throw UnableToFindOrderException(invoice.orderId)
+
+        if (!order.currencyCode.equals(invoice.currencyCode)) {
+            throw ImprorerCurrencyCodeException("Invoice currency code ${invoice.currencyCode} should match order currency code ${order.currencyCode}")
+        }
 
         val orderAmount = order.totalAmount ?: BigDecimal.ZERO;
-        val totalInvoiceAmount = getTotalInvoiceAmount(invoice.order_id);
+        val totalInvoiceAmount = getTotalInvoiceAmount(invoice.orderId);
         val requestedInvoiceAmount = BigDecimal(invoice.totalAmount);
         if(requestedInvoiceAmount > orderAmount) {
-            throw InvalidInvoiceAmount("Invoice amount {} is greater than order amount {}".format(totalInvoiceAmount, orderAmount))
+            throw InvalidInvoiceAmountException("Invoice amount $totalInvoiceAmount is greater than order amount $orderAmount")
         }
         if(requestedInvoiceAmount + totalInvoiceAmount > orderAmount) {
             val pendingAmount = orderAmount - totalInvoiceAmount
-            throw InvalidInvoiceAmount("Invoice amount {} can't exceed {} for a total order amount of {}".format(requestedInvoiceAmount, pendingAmount, orderAmount))
+            throw InvalidInvoiceAmountException("Invoice amount $requestedInvoiceAmount can't exceed $pendingAmount for a total order amount of $orderAmount")
         }
         return createInvoice(invoiceEntityMapper(invoice))
     }
@@ -74,7 +79,7 @@ class InvoiceRepository {
 
     private fun invoiceEntityMapper(invoice: InvoiceRequestDto) : InvoiceEntity  {
         val currTime = LocalDateTime.now()
-        return InvoiceEntity(invoice.order_id,
+        return InvoiceEntity(invoice.orderId,
                 invoice.totalAmount,
                 invoice.currencyCode,
                 currTime,

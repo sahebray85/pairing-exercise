@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import io.billie.products.enums.LegalEntityType
 import java.time.LocalDate
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.Size
 
 data class OrganisationRequestDto(
     @field:NotBlank val name: String,
     @JsonFormat(pattern = "dd/MM/yyyy") @JsonProperty("date_founded") val dateFounded: LocalDate,
-    @field:NotBlank @JsonProperty("country_code") val countryCode: String,
+    @field:NotBlank @JsonProperty("country_code")  @Size(min = 2, max = 2) val countryCode: String,
     @JsonProperty("vat_number") val VATNumber: String?,
     @JsonProperty("registration_number") val registrationNumber: String?,
     @JsonProperty("local_address") val address: String?,

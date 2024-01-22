@@ -24,8 +24,8 @@ class OrderRepository {
 
     @Transactional
     fun create(order: OrderRequestDto): UUID {
-        if(!validOrganisation(order.merchant_id)) {
-            throw UnableToFindOrganisation(order.merchant_id)
+        if(!validOrganisation(order.merchantId)) {
+            throw UnableToFindOrganisation(order.merchantId)
         }
         return createOrder(orderEntityMapper(order))
     }
@@ -44,8 +44,8 @@ class OrderRepository {
 
     private fun orderEntityMapper(order: OrderRequestDto) : OrderEntity  {
         val currTime = LocalDateTime.now()
-        return OrderEntity(order.buyer_id,
-                order.merchant_id,
+        return OrderEntity(order.buyerId,
+                order.merchantId,
                 BigDecimal(order.totalAmount),
                 order.currencyCode,
                 currTime

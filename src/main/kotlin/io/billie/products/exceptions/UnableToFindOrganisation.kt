@@ -2,4 +2,4 @@ package io.billie.products.exceptions
 
 import java.util.*
 
-class UnableToFindOrganisation(val merchantId: UUID) : RuntimeException()
+class UnableToFindOrganisation(merchantId: UUID) : RuntimeException("Unable to find orgranisation with $merchantId")
